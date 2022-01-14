@@ -1,0 +1,15 @@
+.idea
+
+.pytest_cache
+
+pycache/
+*.pyc
+
+.env
+venv
+
+*.db
+*.sqlite3
+
+media_root/images/
+shop/templates/shop/example.html

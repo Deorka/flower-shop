@@ -1,0 +1,69 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <p></p>
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1 style="text-align:center;"> {{ flower.variety }} </h1>
+            <br>
+            <dl class="row">
+                <dt class="col-sm-3">Картинка
+                    <div class="ecommerce-gallery" data-mdb-zoom-effect="true" data-mdb-auto-height="true">
+                        <div class="row py-3 shadow-5">
+                            <div class="col-12 mb-1">
+                                <div class="lightbox">
+                                    <img
+                                            src="{{ flower.main_photo.url }}"
+                                            alt="Gallery image 1"
+                                            class="ecommerce-gallery-main-img active w-100"
+                                    />
+                                </div>
+                            </div>
+                            {% for image in flower.images.all %}
+                                <div class="col-3 mt-1">
+                                    <img
+                                            src="{{ image.image.url }}"
+                                            data-mdb-img="{{ image.image.url }}"
+                                            alt="Gallery image 1"
+                                            class="active w-100"
+                                    />
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </dt>
+                <dd class="col-sm-9">
+                    <div>
+                        <form>
+                            <p>Производитель: {{ flower.manufacturer }}</p>
+                            <p>Группа: {{ flower.species }}</p>
+                            <p>Высота: {{ flower.height }}см</p>
+                            <p>Размер цветка: {{ flower.size }}</p>
+                            <p>Срок цветения: {{ flower.florescence }}</p>
+                            <p>Срок поставки: {{ flower.delivery }}</p>
+
+                            {% for item in flower.items.all %}
+                                {% if item.availability == 'AV' %}
+                                    <input type="number" id="{{ item.pk }}" size="2"
+                                           style="border: white; border-radius: 3px"
+                                           name="flower_delivery" value="0">
+                                    <label for="{{ item }}">
+                                        <p>Размер поставки: {{ item.supply_size }}, цена: {{ item.price }}</p>
+                                    </label>
+                                    <p>Осталось: {{ item.warehouse.amount }} шт</p>
+                                {% else %}
+                                    <p>{{ item.get_availability_display }}</p>
+                                {% endif %}
+                            {% endfor %}
+
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div><a class="btn btn-outline-dark mt-auto" href="!#"> Добавить к корзину</a></div>
+                            </div>
+                        </form>
+                    </div>
+                </dd>
+
+                <p>Описание: {{ flower.description }}</p>
+            </dl>
+        </div>
+    </main>
+{% endblock %}

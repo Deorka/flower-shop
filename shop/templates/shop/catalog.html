@@ -1,0 +1,107 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <table width="100%" cellspacing="0" cellpadding="5">
+        <tr>
+            <td style="position: fixed; top:55px; height: 100%">
+                <br>
+                <div class="flex-column flex-shrink-0 p-2" style="width: max-content; background-color: #42e1b2;
+                border-radius: 5px; padding: 10px; margin-top: 90px; margin-left: 20px; ">
+                    <form>
+                        <h4>Сортировка</h4>
+                        <select name="order" style="background-color: white; border: white; width: 100%">
+                            <option value=>По умолчанию</option>
+                            <option value="variety">По названию А..я</option>
+                            <option value="-variety">По названию Я..а</option>
+                            <option value="items__price">По возрастанию цены</option>
+                        </select>
+                        <br>
+                        <br>
+                        <h4>Фильтры</h4>
+                        <hr>
+                        <p>Род:</p>
+                        <select name="genus" style="background-color: white; border: white; width: 100%">
+                            <option value=>Все</option>
+                            {% for item in genuses %}
+                                <option value={{ item.name }}>{{ item.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <p></p>
+                        <p>Вид:</p>
+                        <select name="species" style="background-color: white; border: white; width: 100%">
+                            <option value=>Все</option>
+                            {% for item in specieses %}
+                                <option value={{ item.name }}>{{ item }}</option>
+                            {% endfor %}
+                        </select>
+                        <p></p>
+                        <p>Высота:</p>
+                        <input name="heightl" style="border: white; border-radius: 3px" type="number" placeholder="от"
+                               size="2"> -
+                        <input name="heightr" style="border: white; border-radius: 3px" type="number" placeholder="до"
+                               size="2">
+                        <p></p>
+                        <p><input type="submit" value="Показать"
+                                  style="background-color: white; border: white; border-radius: 3px; margin-left: 25%; margin-top: 10px">
+                        </p>
+                    </form>
+                </div>
+            </td>
+            <!-- Begin page content -->
+            <td style="left:100px">
+                <main class="flex-shrink-0 align-content-center">
+                    <div class="container">
+                        <section class="py-5">
+                            <div class="container px-4 px-lg-5 mt-5">
+                                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                                    {% for flower in flowers %}
+                                        <div class="col mb-5">
+                                            <div class="card h-100" style="border-radius: 20px">
+                                                <div>
+                                                    <a href="{% url 'flower_item' pk=flower.pk %}">
+                                                        <img class="card-img-top" src="{{ flower.main_photo.url }}"
+                                                             style="border-radius: 20px 20px 0 0"
+                                                             alt="..."/>
+                                                    </a>
+                                                </div>
+                                                <!-- Product details-->
+                                                <div class="card-body p-4">
+                                                    <div class="text-center">
+                                                        <a href="{% url 'flower_item' pk=flower.pk %}">
+                                                            <h5 class="fw-bolder">{{ flower.variety }}</h5>
+
+                                                        </a>
+                                                        <!-- Product price-->
+                                                        {% for item in flower.items.all %}
+                                                            {% if item.availability == 'AV' %}
+                                                                <label for="{{ item }}">
+                                                                    <input type="radio" id="{{ item.pk }}"
+                                                                           name="flower_delivery"
+                                                                           value="{{ item.supply_size }}">
+                                                                    Размер: {{ item.supply_size }},
+                                                                    цена: {{ item.price }}
+                                                                </label>
+                                                            {% else %}
+                                                                {{ item.get_availability_display }}
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                                <!-- Product actions-->
+                                                <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                                    <div class="text-center">
+                                                        <a class="btn btn-outline-dark mt-auto" href="!#">
+                                                            Добавить к корзину </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </main>
+            </td>
+        </tr>
+    </table>
+{% endblock %}
